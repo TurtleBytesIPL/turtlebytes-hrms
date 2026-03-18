@@ -94,6 +94,15 @@ export default function LeavesPage() {
 
   const leaves = data?.data || []
   const selectedType = LEAVE_TYPES.find(t => t.value === form.leaveType)
+  
+
+const uniqueBalances = Object.values(
+  balances.reduce((acc: any, curr: any) => {
+    acc[curr.leaveType] = curr
+    return acc
+  }, {})
+  
+)
 
   return (
     <div>
@@ -102,9 +111,9 @@ export default function LeavesPage() {
       <div className="p-6 space-y-5">
 
         {/* ── Leave Balance Cards ──────────────────────────────────────── */}
-        {balances.length > 0 && (
+        {uniqueBalances.length > 0 &&  (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {balances.map((b: any) => {
+            {uniqueBalances.map((b: any) => {
               const available = b.allocated - b.used - b.pending
               const pct = b.allocated > 0 ? Math.min(100, Math.round((available / b.allocated) * 100)) : 0
               const barColor = available > 5 ? 'bg-emerald-500' : available > 0 ? 'bg-amber-400' : 'bg-red-400'

@@ -1,15 +1,26 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards, Res } from '@nestjs/common';
 import { AssetsService, CreateAssetDto, UpdateAssetDto, AssignAssetDto } from './assets.service.js';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../common/guards/roles.guard.js';
 import { Roles } from '../common/decorators/roles.decorator.js';
 import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 import { Role } from '@prisma/client';
+import type { Response } from 'express';
 
 @Controller('assets')
 @UseGuards(JwtAuthGuard)
 export class AssetsController {
   constructor(private assetsService: AssetsService) {}
+
+  @Get('export')
+  @UseGuards(RolesGuard)
+  @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN)
+  async exportAssets(@Res() res: Response) {
+    const csv = await this.assetsService.exportToExcel();
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename="assets-export.csv"');
+    res.send(csv);
+  }
 
   @Post()
   @UseGuards(RolesGuard)

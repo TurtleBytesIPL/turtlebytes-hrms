@@ -15,6 +15,7 @@ import OnboardingPage from './pages/onboarding/OnboardingPage'
 import DocumentsPage from './pages/documents/DocumentsPage'
 import ProfilePage from './pages/profile/ProfilePage'
 
+
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore()
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />

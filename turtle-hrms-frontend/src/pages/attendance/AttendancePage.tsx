@@ -9,13 +9,13 @@ import { formatDate, formatTime, MONTHS } from '../../utils/helpers'
 import toast from 'react-hot-toast'
 
 const STATUS_COLOR: Record<string, string> = {
-  PRESENT: 'bg-emerald-100 text-emerald-700',
-  ABSENT: 'bg-red-100 text-red-700',
-  LATE: 'bg-amber-100 text-amber-700',
+  PRESENT:  'bg-emerald-100 text-emerald-700',
+  ABSENT:   'bg-red-100 text-red-700',
+  LATE:     'bg-amber-100 text-amber-700',
   HALF_DAY: 'bg-blue-100 text-blue-700',
   ON_LEAVE: 'bg-violet-100 text-violet-700',
-  WEEKEND: 'bg-slate-100 text-slate-400',
-  HOLIDAY: 'bg-pink-100 text-pink-700',
+  WEEKEND:  'bg-slate-100 text-slate-400',
+  HOLIDAY:  'bg-pink-100 text-pink-700',
 }
 
 // ─── HR Global Report Panel ───────────────────────────────────────────────────
@@ -60,23 +60,24 @@ function HRReportPanel() {
           <div className="flex rounded-xl overflow-hidden border border-slate-200">
             {(['daily', 'weekly', 'monthly'] as const).map((t) => (
               <button key={t} onClick={() => setReportType(t)}
-                className={`px-4 py-2 text-sm font-medium capitalize transition-colors ${reportType === t ? 'bg-primary-600 text-white' : 'bg-white text-slate-600 hover:bg-slate-50'
-                  }`}>{t}</button>
+                className={`px-4 py-2 text-sm font-medium capitalize transition-colors ${
+                  reportType === t ? 'bg-primary-600 text-white' : 'bg-white text-slate-600 hover:bg-slate-50'
+                }`}>{t}</button>
             ))}
           </div>
           {reportType !== 'monthly'
             ? <input type="date" className="input max-w-44" value={reportDate}
-              onChange={(e: any) => setReportDate(e.target.value)} />
+                onChange={(e: any) => setReportDate(e.target.value)} />
             : <div className="flex gap-2">
-              <select className="input w-36" value={reportMonth}
-                onChange={(e: any) => setReportMonth(+e.target.value)}>
-                {MONTHS.map((m: string, i: number) => <option key={i} value={i + 1}>{m}</option>)}
-              </select>
-              <select className="input w-24" value={reportYear}
-                onChange={(e: any) => setReportYear(+e.target.value)}>
-                {[2024, 2025, 2026].map((y: number) => <option key={y} value={y}>{y}</option>)}
-              </select>
-            </div>
+                <select className="input w-36" value={reportMonth}
+                  onChange={(e: any) => setReportMonth(+e.target.value)}>
+                  {MONTHS.map((m: string, i: number) => <option key={i} value={i + 1}>{m}</option>)}
+                </select>
+                <select className="input w-24" value={reportYear}
+                  onChange={(e: any) => setReportYear(+e.target.value)}>
+                  {[2024, 2025, 2026].map((y: number) => <option key={y} value={y}>{y}</option>)}
+                </select>
+              </div>
           }
           <button onClick={handleDownload} disabled={downloading}
             className="btn-secondary gap-2 ml-auto">
@@ -89,12 +90,12 @@ function HRReportPanel() {
       {/* Summary cards */}
       <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
         {[
-          { label: 'Present', value: summary.present || 0, color: 'text-emerald-600 bg-emerald-50' },
-          { label: 'Absent', value: summary.absent || 0, color: 'text-red-600 bg-red-50' },
-          { label: 'Late', value: summary.late || 0, color: 'text-amber-600 bg-amber-50' },
-          { label: 'Half Day', value: summary.halfDay || 0, color: 'text-blue-600 bg-blue-50' },
-          { label: 'On Leave', value: summary.onLeave || 0, color: 'text-violet-600 bg-violet-50' },
-          { label: 'Total', value: summary.total || 0, color: 'text-slate-700 bg-slate-50' },
+          { label: 'Present',  value: summary.present  || 0, color: 'text-emerald-600 bg-emerald-50' },
+          { label: 'Absent',   value: summary.absent   || 0, color: 'text-red-600 bg-red-50' },
+          { label: 'Late',     value: summary.late     || 0, color: 'text-amber-600 bg-amber-50' },
+          { label: 'Half Day', value: summary.halfDay  || 0, color: 'text-blue-600 bg-blue-50' },
+          { label: 'On Leave', value: summary.onLeave  || 0, color: 'text-violet-600 bg-violet-50' },
+          { label: 'Total',    value: summary.total    || 0, color: 'text-slate-700 bg-slate-50' },
         ].map((s: any) => (
           <div key={s.label} className={`card p-3 text-center ${s.color}`}>
             <p className="text-xl font-bold">{s.value}</p>
@@ -225,23 +226,24 @@ function EmployeeReportPanel() {
           <div className="flex rounded-xl overflow-hidden border border-slate-200">
             {(['weekly', 'monthly'] as const).map((t) => (
               <button key={t} onClick={() => setReportType(t)}
-                className={`px-4 py-2 text-sm font-medium capitalize transition-colors ${reportType === t ? 'bg-primary-600 text-white' : 'bg-white text-slate-600 hover:bg-slate-50'
-                  }`}>{t}</button>
+                className={`px-4 py-2 text-sm font-medium capitalize transition-colors ${
+                  reportType === t ? 'bg-primary-600 text-white' : 'bg-white text-slate-600 hover:bg-slate-50'
+                }`}>{t}</button>
             ))}
           </div>
           {reportType === 'weekly'
             ? <input type="date" className="input max-w-44" value={reportDate}
-              onChange={(e: any) => setReportDate(e.target.value)} />
+                onChange={(e: any) => setReportDate(e.target.value)} />
             : <div className="flex gap-2">
-              <select className="input w-32" value={reportMonth}
-                onChange={(e: any) => setReportMonth(+e.target.value)}>
-                {MONTHS.map((m: string, i: number) => <option key={i} value={i + 1}>{m}</option>)}
-              </select>
-              <select className="input w-24" value={reportYear}
-                onChange={(e: any) => setReportYear(+e.target.value)}>
-                {[2024, 2025, 2026].map((y: number) => <option key={y} value={y}>{y}</option>)}
-              </select>
-            </div>
+                <select className="input w-32" value={reportMonth}
+                  onChange={(e: any) => setReportMonth(+e.target.value)}>
+                  {MONTHS.map((m: string, i: number) => <option key={i} value={i + 1}>{m}</option>)}
+                </select>
+                <select className="input w-24" value={reportYear}
+                  onChange={(e: any) => setReportYear(+e.target.value)}>
+                  {[2024, 2025, 2026].map((y: number) => <option key={y} value={y}>{y}</option>)}
+                </select>
+              </div>
           }
           {selectedEmp && (
             <button onClick={handleDownload} disabled={downloading}
@@ -277,12 +279,12 @@ function EmployeeReportPanel() {
         <>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
             {[
-              { label: 'Present', value: summary.present || 0, color: 'text-emerald-600 bg-emerald-50' },
-              { label: 'Absent', value: summary.absent || 0, color: 'text-red-600 bg-red-50' },
-              { label: 'Late', value: summary.late || 0, color: 'text-amber-600 bg-amber-50' },
-              { label: 'Half Day', value: summary.halfDay || 0, color: 'text-blue-600 bg-blue-50' },
-              { label: 'On Leave', value: summary.onLeave || 0, color: 'text-violet-600 bg-violet-50' },
-              { label: 'Total', value: summary.total || 0, color: 'text-slate-700 bg-slate-50' },
+              { label: 'Present',  value: summary.present  || 0, color: 'text-emerald-600 bg-emerald-50' },
+              { label: 'Absent',   value: summary.absent   || 0, color: 'text-red-600 bg-red-50' },
+              { label: 'Late',     value: summary.late     || 0, color: 'text-amber-600 bg-amber-50' },
+              { label: 'Half Day', value: summary.halfDay  || 0, color: 'text-blue-600 bg-blue-50' },
+              { label: 'On Leave', value: summary.onLeave  || 0, color: 'text-violet-600 bg-violet-50' },
+              { label: 'Total',    value: summary.total    || 0, color: 'text-slate-700 bg-slate-50' },
             ].map((s: any) => (
               <div key={s.label} className={`card p-3 text-center ${s.color}`}>
                 <p className="text-xl font-bold">{s.value}</p>
@@ -360,12 +362,12 @@ function MyAttendanceView() {
       {summary && (
         <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
           {[
-            { label: 'Present', value: summary.present || 0, color: 'text-emerald-600 bg-emerald-50' },
-            { label: 'Absent', value: summary.absent || 0, color: 'text-red-600 bg-red-50' },
-            { label: 'Late', value: summary.late || 0, color: 'text-amber-600 bg-amber-50' },
-            { label: 'Leaves', value: summary.onLeave || 0, color: 'text-violet-600 bg-violet-50' },
-            { label: 'Half Day', value: summary.halfDay || 0, color: 'text-blue-600 bg-blue-50' },
-            { label: 'Avg Hrs', value: summary.avgHours ? Number(summary.avgHours).toFixed(1) : '—', color: 'text-slate-700 bg-slate-50' },
+            { label: 'Present',  value: summary.present  || 0, color: 'text-emerald-600 bg-emerald-50' },
+            { label: 'Absent',   value: summary.absent   || 0, color: 'text-red-600 bg-red-50' },
+            { label: 'Late',     value: summary.late     || 0, color: 'text-amber-600 bg-amber-50' },
+            { label: 'Leaves',   value: summary.onLeave  || 0, color: 'text-violet-600 bg-violet-50' },
+            { label: 'Half Day', value: summary.halfDay  || 0, color: 'text-blue-600 bg-blue-50' },
+            { label: 'Avg Hrs',  value: summary.avgHours ? Number(summary.avgHours).toFixed(1) : '—', color: 'text-slate-700 bg-slate-50' },
           ].map((s: any) => (
             <div key={s.label} className={`card p-3 text-center ${s.color}`}>
               <p className="text-xl font-bold">{s.value}</p>
@@ -388,22 +390,6 @@ function MyAttendanceView() {
             <tbody>
               {(list || []).map((r: any) => (
                 <tr key={r.id} className="border-t border-slate-50 hover:bg-slate-50/50">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <Avatar
-                        name={`${r.employee?.firstName || ''} ${r.employee?.lastName || ''}`}
-                        size="sm"
-                      />
-                      <div>
-                        <p className="text-sm font-medium text-slate-700">
-                          {r.employee?.firstName} {r.employee?.lastName}
-                        </p>
-                        <p className="text-xs text-slate-400">
-                          {r.employee?.employeeCode}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
                   <td className="px-4 py-3 text-sm text-slate-600">{formatDate(r.date)}</td>
                   <td className="px-4 py-3 text-xs text-slate-400">{new Date(r.date).toLocaleDateString('en-IN', { weekday: 'short' })}</td>
                   <td className="px-4 py-3">
@@ -432,36 +418,201 @@ function MyAttendanceView() {
   )
 }
 
+// ─── Team Lead Approval Panel ─────────────────────────────────────────────────
+function TeamLeadPanel() {
+  const qc = useQueryClient()
+  const now = new Date()
+  const [month, setMonth] = useState(now.getMonth() + 1)
+  const [year, setYear] = useState(now.getFullYear())
+  const [rejectId, setRejectId] = useState<string | null>(null)
+  const [rejectReason, setRejectReason] = useState('')
+  const [editRec, setEditRec] = useState<any>(null)
+  const [editForm, setEditForm] = useState({ checkIn: '', checkOut: '', notes: '' })
+
+  const { data: teamData } = useQuery({
+    queryKey: ['my-team-tl'],
+    queryFn: () => import('../../services/api').then(m => m.teamsApi.myTeam()).then(r => r.data),
+  })
+
+  const { data: records = [], isLoading } = useQuery({
+    queryKey: ['tl-team-attendance', teamData?.id, month, year],
+    queryFn: () => import('../../services/api').then(m => m.teamsApi.getAttendance(teamData!.id, { month, year })).then(r => r.data),
+    enabled: !!teamData?.id,
+  })
+
+  const approveMut = useMutation({
+    mutationFn: (id: string) => attendanceApi.approve(id),
+    onSuccess: () => { toast.success('Approved'); qc.invalidateQueries({ queryKey: ['tl-team-attendance'] }) },
+  })
+  const rejectMut = useMutation({
+    mutationFn: ({ id, reason }: { id: string; reason: string }) => attendanceApi.reject(id, reason),
+    onSuccess: () => { toast.success('Rejected'); setRejectId(null); setRejectReason(''); qc.invalidateQueries({ queryKey: ['tl-team-attendance'] }) },
+  })
+  const editMut = useMutation({
+    mutationFn: ({ id, data }: any) => attendanceApi.update(id, data),
+    onSuccess: () => { toast.success('Updated'); setEditRec(null); qc.invalidateQueries({ queryKey: ['tl-team-attendance'] }) },
+  })
+
+  const openEdit = (rec: any) => {
+    setEditRec(rec)
+    const toTime = (dt: string) => dt ? new Date(dt).toTimeString().slice(0, 5) : ''
+    setEditForm({ checkIn: toTime(rec.checkIn), checkOut: toTime(rec.checkOut), notes: rec.notes || '' })
+  }
+
+  const saveEdit = () => {
+    const base = new Date(editRec.date)
+    const toISO = (t: string) => { const d = new Date(base); const [h, m] = t.split(':'); d.setHours(+h, +m, 0, 0); return d.toISOString() }
+    editMut.mutate({ id: editRec.id, data: { checkIn: editForm.checkIn ? toISO(editForm.checkIn) : undefined, checkOut: editForm.checkOut ? toISO(editForm.checkOut) : undefined, notes: editForm.notes } })
+  }
+
+  if (!teamData) return <div className="card p-8 text-center text-slate-400">No team assigned to you. Contact admin.</div>
+
+  return (
+    <div className="space-y-4">
+      <div className="card p-4 flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <p className="font-semibold text-slate-800">{teamData.name}</p>
+          <p className="text-xs text-slate-400">{teamData.members?.length || 0} members</p>
+        </div>
+        <div className="flex gap-2">
+          <select className="input w-32 text-sm py-1.5" value={month} onChange={e => setMonth(+e.target.value)}>
+            {MONTHS.map((m, i) => <option key={i} value={i+1}>{m}</option>)}
+          </select>
+          <select className="input w-24 text-sm py-1.5" value={year} onChange={e => setYear(+e.target.value)}>
+            {[2025, 2026, 2027].map(y => <option key={y} value={y}>{y}</option>)}
+          </select>
+        </div>
+      </div>
+
+      {isLoading ? <PageLoader /> : (
+        <div className="card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-slate-50">
+                <tr>{['Employee','Date','Status','Check In','Check Out','Hours','Approval','Actions'].map(h => (
+                  <th key={h} className="table-th">{h}</th>
+                ))}</tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50">
+                {(records as any[]).length === 0 && (
+                  <tr><td colSpan={8} className="text-center py-10 text-slate-400">No attendance records for this period</td></tr>
+                )}
+                {(records as any[]).map((rec: any) => (
+                  <tr key={rec.id} className="hover:bg-slate-50/50">
+                    <td className="table-td">
+                      <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 text-xs font-bold">
+                          {rec.employee?.firstName?.[0]}{rec.employee?.lastName?.[0]}
+                        </div>
+                        <span className="font-medium">{rec.employee?.firstName} {rec.employee?.lastName}</span>
+                      </div>
+                    </td>
+                    <td className="table-td text-slate-500">{formatDate(rec.date)}</td>
+                    <td className="table-td">
+                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${STATUS_COLOR[rec.status] || 'bg-slate-100 text-slate-500'}`}>
+                        {rec.status?.replace('_', ' ')}
+                      </span>
+                    </td>
+                    <td className="table-td text-slate-500">{rec.checkIn ? formatTime(rec.checkIn) : '—'}</td>
+                    <td className="table-td text-slate-500">{rec.checkOut ? formatTime(rec.checkOut) : '—'}</td>
+                    <td className="table-td text-slate-500">{rec.workHours ? `${Number(rec.workHours).toFixed(1)}h` : '—'}</td>
+                    <td className="table-td">
+                      {rec.approvalStatus === 'APPROVED' && <span className="text-xs text-emerald-600 font-semibold">✓ Approved</span>}
+                      {rec.approvalStatus === 'REJECTED' && <span className="text-xs text-red-500 font-semibold" title={rec.rejectReason}>✗ Rejected</span>}
+                      {(!rec.approvalStatus || rec.approvalStatus === 'PENDING') && <span className="text-xs text-amber-500">Pending</span>}
+                    </td>
+                    <td className="table-td">
+                      <div className="flex gap-1">
+                        {rec.approvalStatus !== 'APPROVED' && (
+                          <button onClick={() => approveMut.mutate(rec.id)} className="text-xs bg-emerald-50 text-emerald-700 hover:bg-emerald-100 px-2 py-1 rounded-md font-medium">Approve</button>
+                        )}
+                        {rec.approvalStatus !== 'REJECTED' && (
+                          <button onClick={() => setRejectId(rec.id)} className="text-xs bg-red-50 text-red-600 hover:bg-red-100 px-2 py-1 rounded-md font-medium">Reject</button>
+                        )}
+                        <button onClick={() => openEdit(rec)} className="text-xs bg-slate-100 text-slate-600 hover:bg-slate-200 px-2 py-1 rounded-md font-medium">Edit</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {rejectId && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-6 space-y-4">
+            <h3 className="font-bold text-slate-900">Reject Attendance</h3>
+            <div><label className="label">Reason *</label>
+              <textarea className="input resize-none" rows={3} value={rejectReason} onChange={e => setRejectReason(e.target.value)} placeholder="Enter reason..." />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <button onClick={() => { setRejectId(null); setRejectReason('') }} className="btn-secondary text-sm">Cancel</button>
+              <button onClick={() => rejectId && rejectReason && rejectMut.mutate({ id: rejectId, reason: rejectReason })} disabled={!rejectReason} className="btn-danger text-sm">Reject</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editRec && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-6 space-y-4">
+            <h3 className="font-bold text-slate-900">Edit — {editRec.employee?.firstName} {editRec.employee?.lastName}</h3>
+            <p className="text-sm text-slate-500">{formatDate(editRec.date)}</p>
+            <div className="grid grid-cols-2 gap-3">
+              <div><label className="label">Check In</label><input type="time" className="input" value={editForm.checkIn} onChange={e => setEditForm(f => ({ ...f, checkIn: e.target.value }))} /></div>
+              <div><label className="label">Check Out</label><input type="time" className="input" value={editForm.checkOut} onChange={e => setEditForm(f => ({ ...f, checkOut: e.target.value }))} /></div>
+            </div>
+            <div><label className="label">Notes</label><input className="input" value={editForm.notes} onChange={e => setEditForm(f => ({ ...f, notes: e.target.value }))} placeholder="Optional..." /></div>
+            <div className="flex gap-2 justify-end">
+              <button onClick={() => setEditRec(null)} className="btn-secondary text-sm">Cancel</button>
+              <button onClick={saveEdit} disabled={editMut.isPending} className="btn-primary text-sm">{editMut.isPending ? 'Saving...' : 'Save'}</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function AttendancePage() {
   const isHR = useIsHR()
-  const [tab, setTab] = useState<'mine' | 'report' | 'employee'>('mine')
+  const { user } = useAuthStore()
+  const isTeamLead = (user?.role as string) === 'TEAM_LEAD'
+  const [tab, setTab] = useState('mine')
 
   const tabs = isHR
     ? [
-      { key: 'mine', label: 'My Attendance' },
-      { key: 'report', label: 'Team Report' },
-      { key: 'employee', label: 'Employee Report' },
-    ]
+        { key: 'mine',     label: 'My Attendance' },
+        { key: 'report',   label: 'Team Report' },
+        { key: 'employee', label: 'Employee Report' },
+      ]
+    : isTeamLead
+    ? [
+        { key: 'mine', label: 'My Attendance' },
+        { key: 'team', label: 'Team Approval' },
+      ]
     : [{ key: 'mine', label: 'My Attendance' }]
 
   return (
     <div>
-      <Header title="Attendance" subtitle="Track attendance and download reports" />
+      <Header title="Attendance" subtitle="Track attendance and manage approvals" />
       <div className="p-6 space-y-5">
-
-        {isHR && (
+        {tabs.length > 1 && (
           <div className="flex gap-1 bg-slate-100 p-1 rounded-xl w-fit">
             {tabs.map((t: any) => (
               <button key={t.key} onClick={() => setTab(t.key)}
-                className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${tab === t.key ? 'bg-white text-primary-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-                  }`}>{t.label}</button>
+                className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
+                  tab === t.key ? 'bg-white text-primary-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                }`}>{t.label}</button>
             ))}
           </div>
         )}
-
-        {tab === 'mine' && <MyAttendanceView />}
-        {tab === 'report' && isHR && <HRReportPanel />}
+        {tab === 'mine'     && <MyAttendanceView />}
+        {tab === 'team'     && isTeamLead && <TeamLeadPanel />}
+        {tab === 'report'   && isHR && <HRReportPanel />}
         {tab === 'employee' && isHR && <EmployeeReportPanel />}
       </div>
     </div>

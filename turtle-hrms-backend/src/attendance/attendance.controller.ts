@@ -29,89 +29,64 @@ export class AttendanceController {
   }
 
   @Get('summary')
-  getMonthSummary(
-    @CurrentUser('employeeId') employeeId: string,
-    @Query('month') month: number,
-    @Query('year') year: number,
-  ) {
+  getMonthSummary(@CurrentUser('employeeId') employeeId: string, @Query('month') month: number, @Query('year') year: number) {
     const now = new Date();
-    return this.attendanceService.getMonthSummary(
-      employeeId, month || now.getMonth() + 1, year || now.getFullYear(),
-    );
+    return this.attendanceService.getMonthSummary(employeeId, month || now.getMonth() + 1, year || now.getFullYear());
   }
 
   @Get('summary/:employeeId')
   @UseGuards(RolesGuard)
-  @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN, Role.MANAGER)
-  getEmployeeSummary(
-    @Param('employeeId') employeeId: string,
-    @Query('month') month: number,
-    @Query('year') year: number,
-  ) {
+  @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN, Role.TEAM_LEAD, Role.MANAGER)
+  getEmployeeSummary(@Param('employeeId') employeeId: string, @Query('month') month: number, @Query('year') year: number) {
     const now = new Date();
-    return this.attendanceService.getMonthSummary(
-      employeeId, month || now.getMonth() + 1, year || now.getFullYear(),
-    );
+    return this.attendanceService.getMonthSummary(employeeId, month || now.getMonth() + 1, year || now.getFullYear());
   }
 
-  // ─── HR Report endpoints ──────────────────────────────────────────────────
+  @Patch(':id/approve')
+  @UseGuards(RolesGuard)
+  @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN, Role.TEAM_LEAD)
+  approve(@Param('id') id: string, @CurrentUser('employeeId') approverId: string, @CurrentUser() user: any) {
+    return this.attendanceService.approve(id, approverId, user);
+  }
+
+  @Patch(':id/reject')
+  @UseGuards(RolesGuard)
+  @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN, Role.TEAM_LEAD)
+  reject(@Param('id') id: string, @Body('reason') reason: string, @CurrentUser('employeeId') approverId: string, @CurrentUser() user: any) {
+    return this.attendanceService.reject(id, approverId, reason || 'Rejected', user);
+  }
+
   @Get('report')
   @UseGuards(RolesGuard)
   @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN)
-  getReport(
-    @Query('type') type: 'daily' | 'weekly' | 'monthly',
-    @Query('date') date: string,
-    @Query('month') month: number,
-    @Query('year') year: number,
-    @Query('week') week: string,
-  ) {
+  getReport(@Query('type') type: string, @Query('date') date: string, @Query('month') month: number, @Query('year') year: number, @Query('week') week: string) {
     return this.attendanceService.getReport({ type, date, month, year, week });
   }
 
   @Get('report/csv')
   @UseGuards(RolesGuard)
   @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN)
-  async downloadReport(
-    @Query('type') type: 'daily' | 'weekly' | 'monthly',
-    @Query('date') date: string,
-    @Query('month') month: number,
-    @Query('year') year: number,
-    @Query('week') week: string,
-    @Res() res: Response,
-  ) {
-    const csv = await this.attendanceService.getReportCSV({ type, date, month, year, week });
+  async downloadReport(@Query('type') type: string, @Query('date') date: string, @Query('month') month: number, @Query('year') year: number, @Res() res: Response) {
+    const csv = await this.attendanceService.getReportCSV({ type, date, month, year });
     res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', `attachment; filename="attendance-report-${type}.csv"`);
+    res.setHeader('Content-Disposition', `attachment; filename="attendance-report.csv"`);
     res.send(csv);
   }
 
   @Get('report/employee/:employeeId')
   @UseGuards(RolesGuard)
-  @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN, Role.MANAGER)
-  getEmployeeReport(
-    @Param('employeeId') employeeId: string,
-    @Query('type') type: 'weekly' | 'monthly',
-    @Query('month') month: number,
-    @Query('year') year: number,
-    @Query('date') date: string,
-  ) {
+  @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN, Role.TEAM_LEAD, Role.MANAGER)
+  getEmployeeReport(@Param('employeeId') employeeId: string, @Query('type') type: string, @Query('month') month: number, @Query('year') year: number, @Query('date') date: string) {
     return this.attendanceService.getReport({ type: type || 'monthly', date, month, year, employeeId });
   }
 
   @Get('report/employee/:employeeId/csv')
   @UseGuards(RolesGuard)
-  @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN, Role.MANAGER)
-  async downloadEmployeeReport(
-    @Param('employeeId') employeeId: string,
-    @Query('type') type: 'weekly' | 'monthly',
-    @Query('month') month: number,
-    @Query('year') year: number,
-    @Query('date') date: string,
-    @Res() res: Response,
-  ) {
+  @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN, Role.TEAM_LEAD, Role.MANAGER)
+  async downloadEmployeeReport(@Param('employeeId') employeeId: string, @Query('type') type: string, @Query('month') month: number, @Query('year') year: number, @Query('date') date: string, @Res() res: Response) {
     const csv = await this.attendanceService.getReportCSV({ type: type || 'monthly', date, month, year, employeeId });
     res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', `attachment; filename="attendance-employee-${type}.csv"`);
+    res.setHeader('Content-Disposition', `attachment; filename="attendance-employee.csv"`);
     res.send(csv);
   }
 
@@ -129,8 +104,8 @@ export class AttendanceController {
 
   @Patch(':id')
   @UseGuards(RolesGuard)
-  @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN)
-  update(@Param('id') id: string, @Body() dto: UpdateAttendanceDto) {
-    return this.attendanceService.update(id, dto);
+  @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN, Role.TEAM_LEAD)
+  update(@Param('id') id: string, @Body() dto: UpdateAttendanceDto, @CurrentUser() user: any) {
+    return this.attendanceService.update(id, dto, user);
   }
 }

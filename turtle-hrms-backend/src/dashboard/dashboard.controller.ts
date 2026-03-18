@@ -11,23 +11,34 @@ import { Role } from '@prisma/client';
 export class DashboardController {
   constructor(private dashboardService: DashboardService) {}
 
+  // ADMIN + TEAM LEAD dashboard
   @Get('admin')
   @UseGuards(RolesGuard)
-  @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN)
+  @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN, Role.MANAGER)
   getAdminDashboard() {
     return this.dashboardService.getAdminDashboard();
   }
 
+  // EMPLOYEE dashboard
   @Get('employee')
   getEmployeeDashboard(@CurrentUser('employeeId') employeeId: string) {
     return this.dashboardService.getEmployeeDashboard(employeeId);
   }
 
+  // AUTO dashboard routing
   @Get()
   getDashboard(@CurrentUser() user: any) {
-    if (user.role === Role.SUPER_ADMIN || user.role === Role.HR_ADMIN) {
+
+    // ADMIN / HR / TEAM LEAD → Admin Dashboard
+    if (
+  user.role === Role.SUPER_ADMIN ||
+  user.role === Role.HR_ADMIN ||
+  user.role === Role.MANAGER
+) {
       return this.dashboardService.getAdminDashboard();
     }
+
+    // EMPLOYEE → Employee Dashboard
     return this.dashboardService.getEmployeeDashboard(user.employeeId);
   }
 }
