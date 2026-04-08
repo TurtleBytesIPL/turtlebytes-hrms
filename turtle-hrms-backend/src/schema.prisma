@@ -82,6 +82,15 @@ enum PayrollFrequency {
   BI_WEEKLY
 }
 
+enum EmployeeStatus {
+  ACTIVE
+  INACTIVE
+  ON_LEAVE
+  TERMINATED
+  RESIGNED
+  ABSCONDING
+}
+
 enum PerformanceRating {
   OUTSTANDING
   EXCEEDS_EXPECTATIONS
@@ -249,7 +258,9 @@ model Employee {
   joiningDate      DateTime
   probationEndDate DateTime?
   confirmationDate DateTime?
-  relievingDate    DateTime?
+  relievingDate      DateTime?
+  resignationReason  String?
+  offboardingRemarks String?
   managerId        String?
   manager          Employee?      @relation("ReportsTo", fields: [managerId], references: [id])
   reportees        Employee[]     @relation("ReportsTo")

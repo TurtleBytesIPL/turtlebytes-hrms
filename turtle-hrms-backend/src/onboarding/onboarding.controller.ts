@@ -30,7 +30,9 @@ export class OnboardingController {
 
   @Post(':employeeId/offboarding/init')
   @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN)
-  initOffboarding(@Param('employeeId') id: string) { return this.svc.initOffboarding(id); }
+  initOffboarding(@Param('employeeId') id: string, @Body() body: { relievingDate?: string; reason?: string; remarks?: string }) {
+    return this.svc.initOffboarding(id, body);
+  }
 
   @Patch('tasks/:taskId/complete')
   @Roles(Role.SUPER_ADMIN, Role.HR_ADMIN)

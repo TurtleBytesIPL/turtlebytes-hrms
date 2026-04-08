@@ -249,7 +249,9 @@ model Employee {
   joiningDate      DateTime
   probationEndDate DateTime?
   confirmationDate DateTime?
-  relievingDate    DateTime?
+  relievingDate      DateTime?
+  resignationReason  String?
+  offboardingRemarks String?
   managerId        String?
   manager          Employee?      @relation("ReportsTo", fields: [managerId], references: [id])
   reportees        Employee[]     @relation("ReportsTo")

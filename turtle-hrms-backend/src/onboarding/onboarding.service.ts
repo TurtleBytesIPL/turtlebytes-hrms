@@ -75,9 +75,11 @@ export class OnboardingService {
       where: { status: 'RESIGNED' },
       select: {
         id: true, firstName: true, lastName: true, employeeCode: true,
-        jobTitle: true, relievingDate: true,
+        jobTitle: true, relievingDate: true, resignationReason: true, offboardingRemarks: true,
+        joiningDate: true,
+        manager: { select: { firstName: true, lastName: true } },
         department: { select: { name: true } },
-        offboardingTasks: { orderBy: { order: 'asc' } },
+        offboardingTasks: { select: { isCompleted: true }, orderBy: { order: 'asc' } },
       },
     });
     return employees.map(e => {
@@ -97,8 +99,16 @@ export class OnboardingService {
     return { tasks, progress: Math.round((completed / tasks.length) * 100), total: tasks.length, completed };
   }
 
-  async initOffboarding(employeeId: string) {
-    await this.prisma.employee.update({ where: { id: employeeId }, data: { status: 'RESIGNED' } });
+  async initOffboarding(employeeId: string, body?: { relievingDate?: string; reason?: string; remarks?: string }) {
+    await this.prisma.employee.update({
+      where: { id: employeeId },
+      data: {
+        status: 'RESIGNED',
+        relievingDate: body?.relievingDate ? new Date(body.relievingDate) : undefined,
+        resignationReason: body?.reason || undefined,
+        offboardingRemarks: body?.remarks || undefined,
+      },
+    });
     return this.getEmployeeOffboarding(employeeId);
   }
 
